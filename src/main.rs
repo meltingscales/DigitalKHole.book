@@ -1,4 +1,7 @@
 use leptos::prelude::*;
+use leptos_router::components::*;
+use leptos_router::path;
+use leptos_router::hooks::use_params_map;
 use serde::{Deserialize, Serialize};
 use image::ImageEncoder;
 
@@ -47,6 +50,14 @@ impl TankaVerses {
     }
 }
 
+/// A tanka with its slug (URL-safe name)
+#[derive(Debug, Clone)]
+pub struct TankaEntry {
+    pub slug: String,
+    pub filename: String,
+    pub tanka: Tanka,
+}
+
 /// Generate QR code as base64 PNG data URI
 fn generate_qr_data_uri(url: &str) -> String {
     use qrcode::QrCode;
@@ -77,80 +88,182 @@ fn generate_qr_data_uri(url: &str) -> String {
     format!("data:image/png;base64,{}", b64)
 }
 
-/// Load tanka from embedded YAML
+/// Load tanka from YAML string
 fn load_tanka(yaml: &str) -> Option<Tanka> {
     serde_yaml::from_str(yaml).ok()
 }
 
-/// Single tanka page component
+/// Convert filename to URL slug
+fn slugify(name: &str) -> String {
+    name.to_lowercase()
+        .replace(' ', "-")
+        .replace(".tanka.yml", "")
+        .replace(".yml", "")
+}
+
+/// All tankas embedded at compile time
+fn all_tankas() -> Vec<TankaEntry> {
+    let files: Vec<(&str, &str)> = vec![
+        ("target oracle grinder apparatus v2.tanka.yml", include_str!("../content/target oracle grinder apparatus v2.tanka.yml")),
+        ("gaiaonline black hole.yml", include_str!("../content/gaiaonline black hole.yml")),
+    ];
+
+    files
+        .into_iter()
+        .filter_map(|(filename, content)| {
+            let tanka = load_tanka(content)?;
+            Some(TankaEntry {
+                slug: slugify(filename),
+                filename: filename.to_string(),
+                tanka,
+            })
+        })
+        .collect()
+}
+
+/// Index page with ls-style listing
 #[component]
-fn TankaPage(tanka: Tanka) -> impl IntoView {
-    let qr_src = generate_qr_data_uri(&tanka.qr_link);
-    let verses = tanka.tanka.as_vec();
+fn IndexPage() -> impl IntoView {
+    let tankas = all_tankas();
 
     view! {
         <div class="page">
-            <div class="tanka-header">
-                {tanka.top_flavor}
-            </div>
-
-            <a class="media-row" href={tanka.qr_link.clone()} target="_blank" rel="noopener">
-                <div class="qr-code">
-                    <img src={qr_src} alt="Album QR code" />
+            <div class="terminal">
+                <div class="prompt">"$ ls -la content/*.yml"</div>
+                <div class="ls-output">
+                    <div class="ls-header">"total "{tankas.len()}</div>
+                    {tankas.into_iter().map(|entry| {
+                        let slug = entry.slug.clone();
+                        view! {
+                            <a class="ls-row" href={format!("/tanka/{}", slug)}>
+                                <span class="ls-perms">"-rw-r--r--"</span>
+                                <span class="ls-user">"henry"</span>
+                                <span class="ls-date">"2026-01-24"</span>
+                                <span class="ls-name">{entry.filename}</span>
+                            </a>
+                        }
+                    }).collect_view()}
                 </div>
-
-                <div class="album-art">
-                    <img src={tanka.art_link.clone()} alt="Album art" />
-                </div>
-
-                <div class="pairing">
-                    <span class="track">{tanka.recommended_music_pairing.track.clone()}</span>
-                    " by "
-                    <span class="artist">{tanka.recommended_music_pairing.artist.clone()}</span>
-                    " at "
-                    <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
-                </div>
-            </a>
-
-            <div class="bandcamp-player">
-                {if tanka.bandcamp_embed_isprivate {
-                    view! {
-                        <div class="private-notice">"album is private - visit link to listen"</div>
-                    }.into_any()
-                } else if let Some(embed_url) = tanka.bandcamp_embed.clone() {
-                    view! {
-                        <iframe src={embed_url}></iframe>
-                    }.into_any()
-                } else {
-                    view! { <></> }.into_any()
-                }}
-            </div>
-
-            <div class="tanka-body">
-                {verses.into_iter().map(|v| view! {
-                    <div class="tanka-verse">{v.to_string()}</div>
-                }).collect_view()}
-            </div>
-
-            <div class="commentary">
-                <p class="about-tanka">{tanka.tankadesc}</p>
-                {tanka.tastingnotes.map(|notes| view! {
-                    <p class="about-song">{notes}</p>
-                })}
             </div>
         </div>
     }
 }
 
-// Embed tanka YAML at compile time
-const TANKA_YAML: &str = include_str!("../content/target oracle grinder apparatus v2.tanka.yml");
+/// Single tanka page component
+#[component]
+fn TankaPageView() -> impl IntoView {
+    let params = use_params_map();
+    let tankas = all_tankas();
+
+    let slug = move || params.read().get("slug").unwrap_or_default();
+
+    let current_idx = {
+        let s = slug();
+        tankas.iter().position(|t| t.slug == s)
+    };
+
+    let entry = current_idx.and_then(|i| tankas.get(i).cloned());
+
+    match entry {
+        Some(entry) => {
+            let prev_slug = current_idx
+                .filter(|&i| i > 0)
+                .map(|i| tankas[i - 1].slug.clone());
+            let next_slug = current_idx
+                .filter(|&i| i < tankas.len() - 1)
+                .map(|i| tankas[i + 1].slug.clone());
+
+            let tanka = entry.tanka;
+            let qr_src = generate_qr_data_uri(&tanka.qr_link);
+            let verses = tanka.tanka.as_vec();
+
+            view! {
+                <div class="page">
+                    <div class="tanka-header">
+                        {tanka.top_flavor}
+                    </div>
+
+                    <a class="media-row" href={tanka.qr_link.clone()} target="_blank" rel="noopener">
+                        <div class="qr-code">
+                            <img src={qr_src} alt="Album QR code" />
+                        </div>
+
+                        <div class="album-art">
+                            <img src={tanka.art_link.clone()} alt="Album art" />
+                        </div>
+
+                        <div class="pairing">
+                            <span class="track">{tanka.recommended_music_pairing.track.clone()}</span>
+                            " by "
+                            <span class="artist">{tanka.recommended_music_pairing.artist.clone()}</span>
+                            " at "
+                            <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
+                        </div>
+                    </a>
+
+                    <div class="bandcamp-player">
+                        {if tanka.bandcamp_embed_isprivate {
+                            view! {
+                                <div class="private-notice">"album is private - visit link to listen"</div>
+                            }.into_any()
+                        } else if let Some(embed_url) = tanka.bandcamp_embed.clone() {
+                            view! {
+                                <iframe src={embed_url}></iframe>
+                            }.into_any()
+                        } else {
+                            view! { <></> }.into_any()
+                        }}
+                    </div>
+
+                    <div class="tanka-body">
+                        {verses.into_iter().map(|v| view! {
+                            <div class="tanka-verse">{v.to_string()}</div>
+                        }).collect_view()}
+                    </div>
+
+                    <div class="commentary">
+                        <p class="about-tanka">{tanka.tankadesc}</p>
+                        {tanka.tastingnotes.map(|notes| view! {
+                            <p class="about-song">{notes}</p>
+                        })}
+                    </div>
+
+                    <nav class="tanka-nav">
+                        <div class="nav-prev">
+                            {prev_slug.map(|s| view! {
+                                <a href={format!("/tanka/{}", s)}>"< prev"</a>
+                            })}
+                        </div>
+                        <div class="nav-index">
+                            <a href="/">"[ls]"</a>
+                        </div>
+                        <div class="nav-next">
+                            {next_slug.map(|s| view! {
+                                <a href={format!("/tanka/{}", s)}>"next >"</a>
+                            })}
+                        </div>
+                    </nav>
+                </div>
+            }.into_any()
+        }
+        None => view! {
+            <div class="page">
+                <div class="error">"tanka not found"</div>
+                <a href="/">"back to index"</a>
+            </div>
+        }.into_any()
+    }
+}
 
 #[component]
 fn App() -> impl IntoView {
-    let tanka = load_tanka(TANKA_YAML).expect("Failed to parse tanka YAML");
-
     view! {
-        <TankaPage tanka=tanka />
+        <Router>
+            <Routes fallback=|| view! { <div>"404"</div> }>
+                <Route path=path!("/") view=IndexPage />
+                <Route path=path!("/tanka/:slug") view=TankaPageView />
+            </Routes>
+        </Router>
     }
 }
 

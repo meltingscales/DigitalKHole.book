@@ -185,20 +185,99 @@ a.media-row:hover {
     color: #fff;
 }
 
-/* list view */
-.tanka-list {
-    list-style: none;
+/* terminal index page */
+.terminal {
+    padding: 24px 0;
 }
 
-.tanka-list li {
-    margin: 8px 0;
+.terminal .prompt {
+    color: #0f0;
+    margin-bottom: 16px;
 }
 
-.tanka-list a {
+.ls-output {
+    font-size: 14px;
+}
+
+.ls-header {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+a.ls-row {
+    display: flex;
+    gap: 16px;
+    padding: 4px 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+a.ls-row:hover {
+    background: #111;
+}
+
+a.ls-row:hover .ls-name {
+    color: #fff;
+}
+
+.ls-perms {
+    color: #666;
+}
+
+.ls-user {
     color: #888;
+    min-width: 60px;
+}
+
+.ls-date {
+    color: #666;
+    min-width: 90px;
+}
+
+.ls-name {
+    color: #4d96ff;
+}
+
+/* tanka page navigation */
+.tanka-nav {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tanka-nav a {
+    color: #666;
     text-decoration: none;
 }
 
-.tanka-list a:hover {
+.tanka-nav a:hover {
     color: #fff;
+}
+
+.nav-prev,
+.nav-next {
+    min-width: 80px;
+}
+
+.nav-prev {
+    text-align: left;
+}
+
+.nav-index {
+    text-align: center;
+}
+
+.nav-next {
+    text-align: right;
+}
+
+/* error page */
+.error {
+    color: #f00;
+    margin-bottom: 16px;
 }

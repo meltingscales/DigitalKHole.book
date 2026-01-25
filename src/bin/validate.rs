@@ -68,8 +68,8 @@ fn main() -> ExitCode {
         let path = entry.path();
         let name = path.file_name().unwrap_or_default().to_string_lossy();
 
-        // Skip template and non-tanka files
-        if name.contains("template") || !name.ends_with(".tanka.yml") {
+        // Skip template and non-yaml files
+        if name.contains("template") || !name.ends_with(".yml") {
             continue;
         }
 
