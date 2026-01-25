@@ -22,3 +22,13 @@ Featuring recommended [music] for each poem and a description of my thoughts on 
 This is version `0.1-tq` of this book.
 
 Due to finishing a Master's, learning Japanese, trying to work out consistently, and many other life events, I want to release 2 versions of this book: This one, a minimal version with enough content to be fun and interesting, and v2.0, which should include a scrapbook-style background for each tanka with [art] from many artists.
+
+## reading as a non-programmer
+
+1. visit <TBD>
+
+## reading as a programmer
+
+1. `just build`
+2. `just dev`
+

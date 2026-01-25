@@ -1,1 +1,15 @@
-top_flavor: 'tanka'
+top_flavor: 'tanka // 57757 // [ <tanka_name> ] '
+qr_link: 'bandcamp.com/album -> qr.png'
+art_link: 'autogen/bandcamp_api'
+recommended_music_pairing:
+  track: "track_name"
+  artist: "artist_name"
+  album: "album_name"
+  volume_level: "extremely loud"
+tanka:
+  1: "verse 1"
+  2: "verse 2"
+  3: "verse 3"
+  4: "verse 4"
+  5: "verse 5"
+longdesc: "this is a template, hello there :3c"
