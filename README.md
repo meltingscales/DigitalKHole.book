@@ -29,4 +29,5 @@ Due to finishing a Master's, learning Japanese, trying to work out consistently,
 
 ## reading as a programmer
 
-1. `just serve`
+1. `cargo install trunk`
+2. `just serve`
