@@ -29,5 +29,4 @@ Due to finishing a Master's, learning Japanese, trying to work out consistently,
 
 ## reading as a programmer
 
-1. `just build`
-2. `just dev`
+1. `just serve`
