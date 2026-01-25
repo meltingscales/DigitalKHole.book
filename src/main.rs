@@ -94,7 +94,7 @@ fn TankaPage(tanka: Tanka) -> impl IntoView {
                 {tanka.top_flavor}
             </div>
 
-            <div class="media-row">
+            <a class="media-row" href={tanka.qr_link.clone()} target="_blank" rel="noopener">
                 <div class="qr-code">
                     <img src={qr_src} alt="Album QR code" />
                 </div>
@@ -110,7 +110,7 @@ fn TankaPage(tanka: Tanka) -> impl IntoView {
                     " at "
                     <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
                 </div>
-            </div>
+            </a>
 
             <div class="bandcamp-player">
                 {if tanka.bandcamp_embed_isprivate {

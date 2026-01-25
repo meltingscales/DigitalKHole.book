@@ -37,11 +37,18 @@ body {
     letter-spacing: 2px;
 }
 
-.media-row {
+a.media-row {
     display: flex;
     align-items: center;
     gap: 16px;
     margin: 24px 0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+a.media-row:hover {
+    opacity: 0.85;
 }
 
 .media-row > * {
