@@ -4,8 +4,15 @@
 default:
     @just --list
 
+# install deps for dev
+setup:
+    echo "https://rustup.rs/"
+    echo "If on arch, just 'sudo -Syu rustup'. it will remove standalone rust."
+    rustup default stable
+    rustup target add wasm32-unknown-unknown
+
 # run dev server with hot reload
-serve: build
+serve: setup build
     ~/.cargo/bin/trunk serve
 
 # run dev server on specific port
