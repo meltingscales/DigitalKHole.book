@@ -5,13 +5,14 @@ use image::ImageEncoder;
 /// Tanka poem with music pairing metadata
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tanka {
-    pub name: String,
     pub top_flavor: String,
     pub qr_link: String,
     pub art_link: String,
     pub recommended_music_pairing: MusicPairing,
     pub tanka: TankaVerses,
-    pub longdesc: String,
+    pub tankadesc: String,
+    #[serde(default)]
+    pub tastingnotes: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -72,6 +73,11 @@ fn generate_qr_data_uri(url: &str) -> String {
     format!("data:image/png;base64,{}", b64)
 }
 
+/// Load tanka from embedded YAML
+fn load_tanka(yaml: &str) -> Option<Tanka> {
+    serde_yaml::from_str(yaml).ok()
+}
+
 /// Single tanka page component
 #[component]
 fn TankaPage(tanka: Tanka) -> impl IntoView {
@@ -107,39 +113,21 @@ fn TankaPage(tanka: Tanka) -> impl IntoView {
             </div>
 
             <div class="commentary">
-                {tanka.longdesc}
+                <p class="about-tanka">{tanka.tankadesc}</p>
+                {tanka.tastingnotes.map(|notes| view! {
+                    <p class="about-song">{notes}</p>
+                })}
             </div>
         </div>
     }
 }
 
-/// Demo tanka for scaffold
-fn demo_tanka() -> Tanka {
-    Tanka {
-        name: "template".to_string(),
-        top_flavor: "tanka // 57757 // [ template ]".to_string(),
-        qr_link: "https://bandcamp.com".to_string(),
-        art_link: "/placeholder.png".to_string(),
-        recommended_music_pairing: MusicPairing {
-            track: "track_name".to_string(),
-            artist: "artist_name".to_string(),
-            album: "album_name".to_string(),
-            volume_level: "extremely loud".to_string(),
-        },
-        tanka: TankaVerses {
-            v1: "verse 1".to_string(),
-            v2: "verse 2".to_string(),
-            v3: "verse 3".to_string(),
-            v4: "verse 4".to_string(),
-            v5: "verse 5".to_string(),
-        },
-        longdesc: "this is a template, hello there :3c".to_string(),
-    }
-}
+// Embed tanka YAML at compile time
+const TANKA_YAML: &str = include_str!("../content/target oracle grinder apparatus v2.tanka.yml");
 
 #[component]
 fn App() -> impl IntoView {
-    let tanka = demo_tanka();
+    let tanka = load_tanka(TANKA_YAML).expect("Failed to parse tanka YAML");
 
     view! {
         <TankaPage tanka=tanka />

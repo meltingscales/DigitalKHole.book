@@ -90,7 +90,18 @@ html, body {
     border-top: 1px solid #333;
     font-size: 14px;
     color: #aaa;
-    white-space: pre-wrap;
+}
+
+.commentary p {
+    margin-bottom: 16px;
+}
+
+.commentary .about-tanka {
+    /* about the tanka itself */
+}
+
+.commentary .about-song {
+    /* about listening to the paired song */
 }
 
 /* navigation between tankas */
