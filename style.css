@@ -1,8 +1,8 @@
 /* TemplOS vibe: raw, minimal, beautiful in its austerity */
 
 @font-face {
-    font-family: 'Terminal';
-    src: local('Courier New'), local('Consolas'), local('monospace');
+    font-family: "Terminal";
+    src: local("Courier New"), local("Consolas"), local("monospace");
 }
 
 * {
@@ -11,10 +11,11 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     background: #000;
     color: #fff;
-    font-family: 'Terminal', monospace;
+    font-family: "Terminal", monospace;
     font-size: 16px;
     line-height: 1.4;
 }
@@ -31,6 +32,7 @@ html, body {
 .tanka-header {
     font-size: 12px;
     color: #888;
+    text-align: center;
     margin-bottom: 24px;
     letter-spacing: 2px;
 }
@@ -81,9 +83,36 @@ html, body {
     text-align: center;
 }
 
-.pairing .track { color: #fff; display: block; }
-.pairing .artist { color: #888; }
-.pairing .volume { color: #f00; }
+.pairing .track {
+    color: #fff;
+    display: block;
+}
+.pairing .artist {
+    color: #888;
+}
+.pairing .volume {
+    color: #f00;
+}
+
+.bandcamp-player {
+    margin: 24px 0;
+}
+
+.bandcamp-player iframe {
+    border: 0;
+    width: 100%;
+    height: 42px;
+}
+
+.bandcamp-player .private-notice {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 12px;
+    border: 1px solid #333;
+}
 
 .tanka-body {
     margin: 48px 0;
@@ -96,11 +125,21 @@ html, body {
     color: #fff;
 }
 
-.tanka-verse:nth-child(1) { color: #ff6b6b; }
-.tanka-verse:nth-child(2) { color: #ffd93d; }
-.tanka-verse:nth-child(3) { color: #6bcb77; }
-.tanka-verse:nth-child(4) { color: #4d96ff; }
-.tanka-verse:nth-child(5) { color: #9b59b6; }
+.tanka-verse:nth-child(1) {
+    color: #ff6b6b;
+}
+.tanka-verse:nth-child(2) {
+    color: #ffd93d;
+}
+.tanka-verse:nth-child(3) {
+    color: #6bcb77;
+}
+.tanka-verse:nth-child(4) {
+    color: #4d96ff;
+}
+.tanka-verse:nth-child(5) {
+    color: #9b59b6;
+}
 
 .commentary {
     margin-top: 48px;

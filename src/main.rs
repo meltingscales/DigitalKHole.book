@@ -8,6 +8,10 @@ pub struct Tanka {
     pub top_flavor: String,
     pub qr_link: String,
     pub art_link: String,
+    #[serde(default)]
+    pub bandcamp_embed: Option<String>,
+    #[serde(default)]
+    pub bandcamp_embed_isprivate: bool,
     pub recommended_music_pairing: MusicPairing,
     pub tanka: TankaVerses,
     pub tankadesc: String,
@@ -106,6 +110,20 @@ fn TankaPage(tanka: Tanka) -> impl IntoView {
                     " at "
                     <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
                 </div>
+            </div>
+
+            <div class="bandcamp-player">
+                {if tanka.bandcamp_embed_isprivate {
+                    view! {
+                        <div class="private-notice">"album is private - visit link to listen"</div>
+                    }.into_any()
+                } else if let Some(embed_url) = tanka.bandcamp_embed.clone() {
+                    view! {
+                        <iframe src={embed_url}></iframe>
+                    }.into_any()
+                } else {
+                    view! { <></> }.into_any()
+                }}
             </div>
 
             <div class="tanka-body">

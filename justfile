@@ -40,3 +40,7 @@ lint:
 # watch for changes and rebuild
 watch:
     ~/.cargo/bin/trunk watch
+
+# validate all tanka yaml files against schema
+validate:
+    cargo run --bin validate

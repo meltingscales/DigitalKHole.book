@@ -1,16 +1,26 @@
+# Tanka schema template
+# Keep in sync with src/main.rs Tanka struct
+
 top_flavor: "tanka // 57757 // [ <tanka_name> ] "
-qr_link: "bandcamp.com/album -> qr.png"
-art_link: "autogen/bandcamp_api"
+qr_link: "https://example.bandcamp.com/album/example"
+art_link: "https://f4.bcbits.com/img/example.jpg"
+
+# Bandcamp embed (optional - use one or the other)
+bandcamp_embed: "https://bandcamp.com/EmbeddedPlayer/album=XXXXX/size=small/bgcol=000000/linkcol=ffffff/transparent=true/"
+# bandcamp_embed_isprivate: true  # set if album can't be embedded
+
 recommended_music_pairing:
   track: "track_name"
   artist: "artist_name"
   album: "album_name"
   volume_level: "extremely loud"
+
 tanka:
   1: "verse 1"
   2: "verse 2"
   3: "verse 3"
   4: "verse 4"
   5: "verse 5"
-tankadesc: "this is a tanka"
-tastingnotes: "music rocks"
+
+tankadesc: "about the tanka"
+tastingnotes: "about the song"  # optional
