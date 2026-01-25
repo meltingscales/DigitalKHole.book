@@ -35,35 +35,53 @@ html, body {
     letter-spacing: 2px;
 }
 
-.qr-code {
+.media-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     margin: 24px 0;
 }
 
+.media-row > * {
+    flex: 1;
+    min-width: 0;
+}
+
+.qr-code {
+    display: flex;
+    justify-content: center;
+}
+
 .qr-code img {
-    width: 128px;
-    height: 128px;
+    width: 100%;
+    max-width: 128px;
+    height: auto;
+    aspect-ratio: 1;
     image-rendering: pixelated;
 }
 
 .album-art {
-    margin: 24px 0;
+    display: flex;
+    justify-content: center;
 }
 
 .album-art img {
-    width: 256px;
-    height: 256px;
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    aspect-ratio: 1;
     border: 1px solid #fff;
 }
 
 .pairing {
     font-size: 11px;
     color: #666;
-    margin: 16px 0;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-align: center;
 }
 
-.pairing .track { color: #fff; }
+.pairing .track { color: #fff; display: block; }
 .pairing .artist { color: #888; }
 .pairing .volume { color: #f00; }
 

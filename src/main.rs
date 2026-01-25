@@ -90,20 +90,22 @@ fn TankaPage(tanka: Tanka) -> impl IntoView {
                 {tanka.top_flavor}
             </div>
 
-            <div class="qr-code">
-                <img src={qr_src} alt="Album QR code" />
-            </div>
+            <div class="media-row">
+                <div class="qr-code">
+                    <img src={qr_src} alt="Album QR code" />
+                </div>
 
-            <div class="album-art">
-                <img src={tanka.art_link.clone()} alt="Album art" />
-            </div>
+                <div class="album-art">
+                    <img src={tanka.art_link.clone()} alt="Album art" />
+                </div>
 
-            <div class="pairing">
-                <span class="track">{tanka.recommended_music_pairing.track.clone()}</span>
-                " by "
-                <span class="artist">{tanka.recommended_music_pairing.artist.clone()}</span>
-                " // "
-                <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
+                <div class="pairing">
+                    <span class="track">{tanka.recommended_music_pairing.track.clone()}</span>
+                    " by "
+                    <span class="artist">{tanka.recommended_music_pairing.artist.clone()}</span>
+                    " at "
+                    <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
+                </div>
             </div>
 
             <div class="tanka-body">
