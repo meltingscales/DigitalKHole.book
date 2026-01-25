@@ -5,7 +5,7 @@ default:
     @just --list
 
 # run dev server with hot reload
-serve:
+serve: build
     ~/.cargo/bin/trunk serve
 
 # run dev server on specific port
