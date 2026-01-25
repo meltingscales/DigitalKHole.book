@@ -1,0 +1,6 @@
+/target
+/dist
+.trunk
+*.swp
+*.swo
+.DS_Store

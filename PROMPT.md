@@ -1,5 +1,5 @@
 [meta: to help me write the backend as a rust SPA.]
-working on a book, I was originally creating this with adobe indesign, and laying out a neat template that looks like `PAGE_TANKA_TEMPLATE.csv` with `content/template.meta.yml` as another guide for data.
+working on a book, I was originally creating this with adobe indesign, and laying out a neat template that looks like `PAGE_TANKA_TEMPLATE.fods` with `content/template.meta.yml` as another guide for data.
 
 I want to make a SPA that lets people read my book.
 

@@ -1,0 +1,152 @@
+use leptos::prelude::*;
+use serde::{Deserialize, Serialize};
+use image::ImageEncoder;
+
+/// Tanka poem with music pairing metadata
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Tanka {
+    pub name: String,
+    pub top_flavor: String,
+    pub qr_link: String,
+    pub art_link: String,
+    pub recommended_music_pairing: MusicPairing,
+    pub tanka: TankaVerses,
+    pub longdesc: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MusicPairing {
+    pub track: String,
+    pub artist: String,
+    pub album: String,
+    pub volume_level: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TankaVerses {
+    #[serde(rename = "1")]
+    pub v1: String,
+    #[serde(rename = "2")]
+    pub v2: String,
+    #[serde(rename = "3")]
+    pub v3: String,
+    #[serde(rename = "4")]
+    pub v4: String,
+    #[serde(rename = "5")]
+    pub v5: String,
+}
+
+impl TankaVerses {
+    pub fn as_vec(&self) -> Vec<&str> {
+        vec![&self.v1, &self.v2, &self.v3, &self.v4, &self.v5]
+    }
+}
+
+/// Generate QR code as base64 PNG data URI
+fn generate_qr_data_uri(url: &str) -> String {
+    use qrcode::QrCode;
+    use image::Luma;
+    use base64::Engine;
+
+    let code = match QrCode::new(url.as_bytes()) {
+        Ok(c) => c,
+        Err(_) => return String::new(),
+    };
+
+    let image = code.render::<Luma<u8>>()
+        .min_dimensions(128, 128)
+        .build();
+
+    let mut png_bytes: Vec<u8> = Vec::new();
+    let encoder = image::codecs::png::PngEncoder::new(&mut png_bytes);
+    if encoder.write_image(
+        image.as_raw(),
+        image.width(),
+        image.height(),
+        image::ExtendedColorType::L8,
+    ).is_err() {
+        return String::new();
+    }
+
+    let b64 = base64::engine::general_purpose::STANDARD.encode(&png_bytes);
+    format!("data:image/png;base64,{}", b64)
+}
+
+/// Single tanka page component
+#[component]
+fn TankaPage(tanka: Tanka) -> impl IntoView {
+    let qr_src = generate_qr_data_uri(&tanka.qr_link);
+    let verses = tanka.tanka.as_vec();
+
+    view! {
+        <div class="page">
+            <div class="tanka-header">
+                {tanka.top_flavor}
+            </div>
+
+            <div class="qr-code">
+                <img src={qr_src} alt="Album QR code" />
+            </div>
+
+            <div class="album-art">
+                <img src={tanka.art_link.clone()} alt="Album art" />
+            </div>
+
+            <div class="pairing">
+                <span class="track">{tanka.recommended_music_pairing.track.clone()}</span>
+                " by "
+                <span class="artist">{tanka.recommended_music_pairing.artist.clone()}</span>
+                " // "
+                <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
+            </div>
+
+            <div class="tanka-body">
+                {verses.into_iter().map(|v| view! {
+                    <div class="tanka-verse">{v.to_string()}</div>
+                }).collect_view()}
+            </div>
+
+            <div class="commentary">
+                {tanka.longdesc}
+            </div>
+        </div>
+    }
+}
+
+/// Demo tanka for scaffold
+fn demo_tanka() -> Tanka {
+    Tanka {
+        name: "template".to_string(),
+        top_flavor: "tanka // 57757 // [ template ]".to_string(),
+        qr_link: "https://bandcamp.com".to_string(),
+        art_link: "/placeholder.png".to_string(),
+        recommended_music_pairing: MusicPairing {
+            track: "track_name".to_string(),
+            artist: "artist_name".to_string(),
+            album: "album_name".to_string(),
+            volume_level: "extremely loud".to_string(),
+        },
+        tanka: TankaVerses {
+            v1: "verse 1".to_string(),
+            v2: "verse 2".to_string(),
+            v3: "verse 3".to_string(),
+            v4: "verse 4".to_string(),
+            v5: "verse 5".to_string(),
+        },
+        longdesc: "this is a template, hello there :3c".to_string(),
+    }
+}
+
+#[component]
+fn App() -> impl IntoView {
+    let tanka = demo_tanka();
+
+    view! {
+        <TankaPage tanka=tanka />
+    }
+}
+
+fn main() {
+    console_error_panic_hook::set_once();
+    leptos::mount::mount_to_body(App);
+}
