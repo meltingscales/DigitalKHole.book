@@ -25,10 +25,9 @@ Due to finishing a Master's, learning Japanese, trying to work out consistently,
 
 ## reading as a non-programmer
 
-1. visit <TBD>
+1. visit [TBD to be determined](//gay.dog)
 
 ## reading as a programmer
 
 1. `just build`
 2. `just dev`
-
