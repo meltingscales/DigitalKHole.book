@@ -4,6 +4,8 @@
 
 - [ ] make a request handler for `favicon.ico` so it is a randomly generated pixel art perlin noise "circle" that gets darker near the center - to mimic the Synthetic Reality Well of Souls 'pi' grain of sand dropping circle estimation utility/toy, except this time it's biased towards making a hole icon that's somewhat noisy.
 
+- question: do the dates in the `/` home page actually reflect when the .tanka.yml files were last modified? if not, let's make sure they do.
+
 - [ ] **XML color text engine** — Parse `<color:red>text</color>` style markup for flavor text in tankas and commentary. Could support:
   - Named colors: `<color:red>`, `<color:cyan>`
   - Hex colors: `<color:#ff6b6b>`
