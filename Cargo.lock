@@ -280,12 +280,14 @@ dependencies = [
  "base64",
  "console_error_panic_hook",
  "image",
+ "js-sys",
  "leptos",
  "leptos_router",
  "qrcode",
  "serde",
  "serde_yaml",
  "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
