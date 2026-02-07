@@ -94,11 +94,18 @@ a.media-row:hover {
     color: #fff;
     display: block;
 }
+.pairing .album {
+    color: #fff;
+    display: block;
+}
+
 .pairing .artist {
-    color: #888;
+    color: #fff;
+    display: block;
 }
 .pairing .volume {
     color: #f00;
+    display: block;
 }
 
 .bandcamp-player {

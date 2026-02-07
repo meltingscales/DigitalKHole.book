@@ -384,6 +384,8 @@ fn TankaPageView() -> impl IntoView {
                             <span class="track">{tanka.recommended_music_pairing.track.clone()}</span>
                             " by "
                             <span class="artist">{tanka.recommended_music_pairing.artist.clone()}</span>
+                            " from "
+                            <span class="album">{tanka.recommended_music_pairing.album.clone()}</span>
                             " at "
                             <span class="volume">{tanka.recommended_music_pairing.volume_level.clone()}</span>
                         </div>
