@@ -6,6 +6,8 @@
 
 - question: do the dates in the `/` home page actually reflect when the .tanka.yml files were last modified? if not, let's make sure they do.
 
+- add yaml spec `guest_contributor.name` support for 4lung's contributed tankas.
+
 - [ ] **XML color text engine** — Parse `<color:red>text</color>` style markup for flavor text in tankas and commentary. Could support:
   - Named colors: `<color:red>`, `<color:cyan>`
   - Hex colors: `<color:#ff6b6b>`

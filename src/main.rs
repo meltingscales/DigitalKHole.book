@@ -210,6 +210,76 @@ fn set_favicon() {
     let _ = head.append_child(&link);
 }
 
+/// Check localStorage for age verification
+fn check_age_verification() -> bool {
+    use web_sys::Storage;
+
+    let window = match web_sys::window() {
+        Some(w) => w,
+        None => return false,
+    };
+
+    let storage_opt: Option<Storage> = window.local_storage().ok().flatten();
+    let storage = match storage_opt {
+        Some(s) => s,
+        None => return false,
+    };
+
+    storage.get("age_verified").ok().flatten().as_deref() == Some("true")
+}
+
+/// Set age verification in localStorage
+fn set_age_verified() {
+    use web_sys::Storage;
+
+    let window = match web_sys::window() {
+        Some(w) => w,
+        None => return,
+    };
+
+    let storage_opt: Option<Storage> = window.local_storage().ok().flatten();
+    let storage = match storage_opt {
+        Some(s) => s,
+        None => return,
+    };
+
+    let _ = storage.set("age_verified", "true");
+}
+
+/// Age gate overlay component
+#[component]
+fn AgeGate(is_verified: RwSignal<bool>) -> impl IntoView {
+    let on_enter = move |_| {
+        set_age_verified();
+        is_verified.set(true);
+    };
+
+    let on_exit = move |_| {
+        // Redirect away from the site
+        if let Some(window) = web_sys::window() {
+            let location = window.location();
+            let _ = location.assign("https://google.com");
+        }
+    };
+
+    view! {
+        <div class="age-gate-overlay">
+            <div class="age-gate-content">
+                <div class="age-gate-warning">"⚠️ 21+ ONLY ⚠️"</div>
+                <div class="age-gate-title">"Digital K-Hole Version 0.1"</div>
+                <div class="age-gate-message">
+                    <p>"This is a poetry book about my life that covers extreme themes."</p>
+                    <p style="margin-top: 16px">"It may include content that is not suitable for young people or sensitive people."</p>
+                </div>
+                <div class="age-gate-buttons">
+                    <button class="age-gate-button exit" on:click=on_exit>"I am under 21"</button>
+                    <button class="age-gate-button enter" on:click=on_enter>"I am 21 or older"</button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
 /// Tanka poem with music pairing metadata
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tanka {
@@ -447,13 +517,23 @@ fn TankaPageView() -> impl IntoView {
 
 #[component]
 fn App() -> impl IntoView {
+    let is_verified = RwSignal::new(check_age_verification());
+
     view! {
-        <Router>
-            <Routes fallback=|| view! { <div>"404"</div> }>
-                <Route path=path!("/") view=IndexPage />
-                <Route path=path!("/tanka/:slug") view=TankaPageView />
-            </Routes>
-        </Router>
+        {move || {
+            if is_verified.get() {
+                view! {
+                    <Router>
+                        <Routes fallback=|| view! { <div>"404"</div> }>
+                            <Route path=path!("/") view=IndexPage />
+                            <Route path=path!("/tanka/:slug") view=TankaPageView />
+                        </Routes>
+                    </Router>
+                }.into_any()
+            } else {
+                view! { <AgeGate is_verified /> }.into_any()
+            }
+        }}
     }
 }
 

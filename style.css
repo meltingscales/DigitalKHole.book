@@ -293,3 +293,93 @@ a.ls-row:hover .ls-name {
     color: #f00;
     margin-bottom: 16px;
 }
+
+/* age gate overlay */
+.age-gate-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.age-gate-content {
+    max-width: 600px;
+    text-align: center;
+}
+
+.age-gate-warning {
+    color: #f00;
+    font-size: 32px;
+    margin-bottom: 24px;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+.age-gate-title {
+    font-size: 24px;
+    margin-bottom: 32px;
+    color: #fff;
+}
+
+.age-gate-message {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.age-gate-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.age-gate-button {
+    padding: 12px 24px;
+    font-family: "Terminal", monospace;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #333;
+    background: #111;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.1s;
+}
+
+.age-gate-button:hover {
+    background: #222;
+    color: #fff;
+}
+
+.age-gate-button.enter {
+    border-color: #4d96ff;
+    color: #4d96ff;
+}
+
+.age-gate-button.enter:hover {
+    background: #4d96ff;
+    color: #000;
+}
+
+.age-gate-button.exit {
+    border-color: #f00;
+    color: #f00;
+}
+
+.age-gate-button.exit:hover {
+    background: #f00;
+    color: #000;
+}
